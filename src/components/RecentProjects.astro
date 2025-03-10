@@ -1,0 +1,111 @@
+---
+import { getCollection } from "astro:content";
+
+const projects = await getCollection("projects");
+const sortedProjects = projects
+    .filter((project) => project.data.date instanceof Date)
+    .sort((a, b) => {
+        const dateA = a.data.date as Date;
+        const dateB = b.data.date as Date;
+        return dateB.getTime() - dateA.getTime();
+    })
+    .slice(0, 3);
+---
+
+{
+    sortedProjects.length > 0 ? (
+        <div class="recent-projects">
+            <h2>Recent Projects</h2>
+            <ul>
+                {sortedProjects.map((project) => (
+                    <li>
+                        <div class="project-card">
+                            {project.data.image && (
+                                <img
+                                    src={project.data.image}
+                                    alt={project.data.title}
+                                />
+                            )}
+                            <div class="project-content">
+                                <h3>{project.data.title}</h3>
+                                {project.data.excerpt && (
+                                    <p>{project.data.excerpt}</p>
+                                )}
+                                <div class="project-tags">
+                                    {project.data.tags?.map((tag) => (
+                                        <span class="tag">{tag}</span>
+                                    ))}
+                                </div>
+                                <a
+                                    href={`/projects/${project.slug}`}
+                                    class="nav-link"
+                                >
+                                    View Project
+                                </a>
+                            </div>
+                        </div>
+                    </li>
+                ))}
+            </ul>
+        </div>
+    ) : (
+        <p>No projects yet!</p>
+    )
+}
+
+<style lang="scss">
+    @use "../styles/variables" as *;
+
+    .recent-projects {
+        margin: 2em 0;
+    }
+
+    ul {
+        padding-left: 0;
+        list-style: none;
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 2em;
+    }
+
+    .project-card {
+        border: 1px solid rgba($purple, 0.2);
+        padding: 1em;
+        transition: all 0.2s ease;
+
+        &:hover {
+            border-color: $purple;
+        }
+
+        img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            margin-bottom: 1em;
+        }
+    }
+
+    .project-content {
+        h3 {
+            margin-top: 0;
+        }
+
+        p {
+            color: $l-grey;
+        }
+    }
+
+    .project-tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5em;
+        margin: 1em 0;
+
+        .tag {
+            font-size: 0.8em;
+            color: $l-grey;
+            padding: 0.2em 0.5em;
+            border: 1px solid $l-grey;
+        }
+    }
+</style>

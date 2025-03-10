@@ -1,0 +1,78 @@
+@use "variables" as *;
+@use "mixins" as *;
+
+html {
+    padding: env(safe-area-inset);
+    -webkit-text-size-adjust: 100%;
+}
+
+body {
+    font-family: "Inconsolata", monospace;
+    // font-size: 62.5%;
+    margin: 0;
+    padding: 0;
+    @include dark-background;
+}
+
+h1,
+h2,
+h3,
+h4,
+p,
+ul {
+    font-size: 1em;
+    line-height: 1.8em;
+}
+
+h1 {
+    color: $h1-color;
+}
+
+h2 {
+    color: $h2-color;
+}
+
+h3 {
+    color: $h3-color;
+    &::before {
+        content: "> ";
+    }
+}
+
+ul {
+    padding-left: 0;
+    list-style: none;
+    color: $pink;
+}
+
+ol {
+    padding-left: 1.5em;
+}
+
+.container {
+    max-width: 80em;
+    width: 80vw;
+    margin: 3em auto;
+}
+
+a {
+    text-decoration: none;
+    color: $a-color;
+    &:hover {
+        color: #d8c5fb;
+    }
+}
+
+a.nav-link {
+    &::before {
+        content: "[";
+    }
+    &::after {
+        content: "]";
+    }
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+}

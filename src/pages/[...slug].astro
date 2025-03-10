@@ -1,0 +1,148 @@
+---
+// src/pages/[...slug].astro
+import { getCollection } from "astro:content";
+import type { CollectionEntry } from "astro:content";
+import Layout from "../layouts/Layout.astro";
+
+type EntryType = "project" | "post"; 
+type Props = {
+    entry:
+        | CollectionEntry<"projects">
+        | CollectionEntry<"posts">
+    type: EntryType;
+};
+
+export async function getStaticPaths() {
+    const projects = await getCollection("projects");
+    const posts = await getCollection("posts");
+
+    const projectPaths = projects.map((entry) => ({
+        params: { slug: `projects/${entry.slug}` },
+        props: { entry, type: "project" as const },
+    }));
+
+    const postPaths = posts.map((entry) => ({
+        params: { slug: `posts/${entry.slug}` },
+        props: { entry, type: "post" as const },
+    }));
+
+    return [...projectPaths, ...postPaths ];
+}
+
+const { entry, type } = Astro.props;
+const { Content } = await entry.render();
+
+// Type guards
+const isProject = (
+    entry: Props["entry"],
+): entry is CollectionEntry<"projects"> => type === "project";
+const isPost = (entry: Props["entry"]): entry is CollectionEntry<"posts"> =>
+    type === "post";
+---
+
+<Layout>
+    <div class="content-wrapper">
+        <article>
+            {
+                entry.data.image && (
+                    <img
+                        class="lead-img"
+                        src={entry.data.image}
+                        alt={entry.data.title}
+                    />
+                )
+            }
+            <h1>{entry.data.title}</h1>
+
+            {
+                isProject(entry) && entry.data.technologies && (
+                    <div class="tech-stack">
+                        {entry.data.technologies.map((tech: string) => (
+                            <span class="tech-tag">{tech}</span>
+                        ))}
+                    </div>
+                )
+            }
+
+            {
+                isPost(entry) && entry.data.tags && (
+                    <div class="tags">
+                        {entry.data.tags.map((tag: string) => (
+                            <span class="tag">{tag}</span>
+                        ))}
+                    </div>
+                )
+            }
+
+            <Content />
+
+            {
+                isProject(entry) && entry.data.link && (
+                    <div class="project-link">
+                        <a
+                            href={entry.data.link}
+                            class="nav-link"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                        >
+                            View Live Project
+                        </a>
+                    </div>
+                )
+            }
+        </article>
+
+        <div class="navigation">
+            <a href="javascript:history.back()" class="nav-link back-link"
+                >← back</a
+            >
+            <a href="/" class="nav-link home-link">home</a>
+        </div>
+    </div>
+</Layout>
+
+<style lang="scss">
+    @use "../styles/variables" as *;
+
+    .content-wrapper {
+        margin: 2em 0 4em;
+    }
+
+    article {
+        margin: 2em 0;
+    }
+
+    .lead-img {
+        width: 100%;
+        height: auto;
+        margin-bottom: 2em;
+    }
+
+    .tech-stack,
+    .tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5em;
+        margin: 1em 0;
+    }
+
+    .tech-tag,
+    .tag {
+        background: rgba($purple, 0.1);
+        color: $purple;
+        padding: 0.2em 0.6em;
+        border-radius: 4px;
+        font-size: 0.9em;
+    }
+
+    .project-link {
+        margin-top: 2em;
+    }
+
+    .navigation {
+        margin: 2em 0;
+        display: flex;
+        gap: 1.5em;
+        align-items: center;
+    }
+</style>

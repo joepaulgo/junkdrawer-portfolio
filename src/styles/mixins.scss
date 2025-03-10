@@ -1,0 +1,11 @@
+@use 'variables' as *;
+
+@mixin dark-background {
+  background: $dark-background;
+  color: $white;
+}
+
+@mixin light-background {
+  background: $light-background;
+  color: $grey;
+}

@@ -1,0 +1,37 @@
+---
+import { getCollection } from "astro:content";
+
+const projects = await getCollection("posts");
+const sortedProjects = projects.sort((a, b) => {
+    return a.data.title.localeCompare(b.data.title);
+});
+---
+
+<section class="projects-grid">
+    {
+        sortedProjects.map((project) => (
+            <article class="project-card">
+                {project.data.image && (
+                    <div class="image-container">
+                        <img
+                            src={project.data.image}
+                            alt={project.data.title}
+                            class="project-image"
+                        />
+                    </div>
+                )}
+                <div class="project-content">
+                    <h3>{project.data.title}</h3>
+                    {project.data.excerpt && <p>{project.data.excerpt}</p>}
+                    <a href={`/posts/${project.slug}`} class="nav-link">
+                        View Project
+                    </a>
+                </div>
+            </article>
+        ))
+    }
+</section>
+
+<style lang="scss">
+    /* Style remains the same */
+</style>

@@ -1,0 +1,58 @@
+---
+import { getCollection } from "astro:content";
+
+const projects = await getCollection("projects");
+const sortedProjects = projects
+    .filter((project) => project.data.date instanceof Date)
+    .sort((a, b) => {
+        const dateA = a.data.date as Date;
+        const dateB = b.data.date as Date;
+        return dateB.getTime() - dateA.getTime();
+    })
+    .slice(0, 3);
+---
+
+{
+    sortedProjects.length > 0 ? (
+        <div class="recent-projects">
+            <h2>Recent Projects</h2>
+            <ul>
+                {sortedProjects.map((project) => (
+                    <li>
+                        <div class="project-card">
+                            {project.data.image && (
+                                <img
+                                    src={project.data.image}
+                                    alt={project.data.title}
+                                />
+                            )}
+                            <div class="project-content">
+                                <h3>{project.data.title}</h3>
+                                {project.data.excerpt && (
+                                    <p>{project.data.excerpt}</p>
+                                )}
+                                <div class="project-tags">
+                                    {project.data.tags?.map((tag) => (
+                                        <span class="tag">{tag}</span>
+                                    ))}
+                                </div>
+                                <a
+                                    href={`/projects/${project.slug}`}
+                                    class="nav-link"
+                                >
+                                    View Project
+                                </a>
+                            </div>
+                        </div>
+                    </li>
+                ))}
+            </ul>
+        </div>
+    ) : (
+        <p>No projects yet!</p>
+    )
+}
+
+<style lang="scss">
+    /* Style remains the same */
+</style>

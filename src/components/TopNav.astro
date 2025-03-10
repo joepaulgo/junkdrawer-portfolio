@@ -1,0 +1,38 @@
+---
+const { title = "Junkdrawer", description = "" } = Astro.props;
+---
+
+<div class="top-nav">
+    <div class="container nav">
+        <a href="/">{title}</a>
+        <p>{description}</p>
+    </div>
+</div>
+
+<style lang="scss">
+    @use "../styles/variables" as *;
+    @use "../styles/mixins" as *;
+
+    .top-nav {
+        height: 3em;
+        display: flex;
+        align-items: center;
+        @include light-background;
+
+        a {
+            text-decoration: none;
+            color: $grey;
+            font-size: 1em;
+        }
+    }
+
+    .container.nav {
+        display: flex;
+        justify-content: space-between;
+        align-items: inherit;
+
+        p {
+            font-size: 1em;
+        }
+    }
+</style>

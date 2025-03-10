@@ -1,0 +1,89 @@
+---
+interface Props {
+  tags: string[];
+  selectedTags: string[];
+}
+
+const { tags, selectedTags } = Astro.props;
+---
+
+<div class="tag-filter">
+  {tags.map((tag: string) => (
+    <button
+      class:list={[
+        'tag',
+        { active: selectedTags.includes(tag) }
+      ]}
+      data-tag={tag}
+    >
+      {tag}
+    </button>
+  ))}
+</div>
+
+<style lang="scss">
+  @use '../styles/variables' as *;
+
+  .tag-filter {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5em;
+    margin: 2em 0;
+  }
+
+  .tag {
+    padding: 0.3em 0.8em;
+    border: 1px solid $purple;
+    background: transparent;
+    color: $purple;
+    cursor: pointer;
+    font-family: 'Inconsolata', monospace;
+    font-size: 0.9em;
+    transition: all 0.2s ease;
+
+    &:hover {
+      background: rgba($purple, 0.1);
+    }
+
+    &.active {
+      background: $purple;
+      color: $white;
+    }
+  }
+</style>
+
+<script>
+  interface PostElement extends HTMLElement {
+    dataset: {
+      post: string;
+      tags: string;
+    }
+  }
+
+  const buttons = document.querySelectorAll<HTMLButtonElement>('.tag');
+  const posts = document.querySelectorAll<PostElement>('[data-post]');
+  let selectedTags: string[] = [];
+
+  buttons.forEach((button: HTMLButtonElement) => {
+    button.addEventListener('click', () => {
+      const tag = button.getAttribute('data-tag');
+      if (!tag) return;
+      
+      if (selectedTags.includes(tag)) {
+        selectedTags = selectedTags.filter((t: string) => t !== tag);
+        button.classList.remove('active');
+      } else {
+        selectedTags.push(tag);
+        button.classList.add('active');
+      }
+
+      posts.forEach((post: PostElement) => {
+        const postTags = (post.dataset.tags || '').split(',');
+        const shouldShow = selectedTags.length === 0 || 
+          selectedTags.every((tag: string) => postTags.includes(tag));
+        
+        post.classList.toggle('hidden', !shouldShow);
+      });
+    });
+  });
+</script>
