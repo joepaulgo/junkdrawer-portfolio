@@ -1,12 +1,15 @@
 ---
 import { getCollection } from 'astro:content';
-import type { CollectionEntry } from 'astro:content';
 import Layout from '../../layouts/Layout.astro';
 import TagFilter from '../../components/TagFilter.astro';
 
 const posts = await getCollection('posts');
+
+// Get unique tags from all posts
 const allTags = [...new Set(posts.flatMap(post => post.data.tags || []))];
-const selectedTags = Astro.url.searchParams.get('tags')?.split(',') || [];
+
+// Get selected tags from URL params
+const selectedTags = Astro.url.searchParams.get('tags')?.split(',').filter(Boolean) || [];
 ---
 
 <Layout>
