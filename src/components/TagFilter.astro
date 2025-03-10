@@ -53,37 +53,71 @@ const { tags, selectedTags } = Astro.props;
 </style>
 
 <script>
-  interface PostElement extends HTMLElement {
-    dataset: {
-      post: string;
-      tags: string;
-    }
-  }
-
-  const buttons = document.querySelectorAll<HTMLButtonElement>('.tag');
-  const posts = document.querySelectorAll<PostElement>('[data-post]');
+  // Get all tag buttons and card elements
+  const buttons = document.querySelectorAll<HTMLButtonElement>('.tag-filter .tag');
+  const cards = document.querySelectorAll<HTMLElement>('[data-card], [data-post]');
   let selectedTags: string[] = [];
 
-  buttons.forEach((button: HTMLButtonElement) => {
+  // Function to update card visibility based on selected tags
+  const updateVisibility = () => {
+    cards.forEach((card) => {
+      const cardTags = (card.dataset.tags || '').split(',').filter(Boolean);
+      // Show card if no tags selected OR if card has ALL selected tags
+      const shouldShow = selectedTags.length === 0 || 
+        selectedTags.every((tag) => cardTags.includes(tag));
+      
+      card.classList.toggle('hidden', !shouldShow);
+    });
+  };
+
+  // Set up click event for each tag button
+  buttons.forEach((button) => {
     button.addEventListener('click', () => {
-      const tag = button.getAttribute('data-tag');
+      const tag = button.dataset.tag;
       if (!tag) return;
       
       if (selectedTags.includes(tag)) {
-        selectedTags = selectedTags.filter((t: string) => t !== tag);
+        // Remove tag if already selected
+        selectedTags = selectedTags.filter((t) => t !== tag);
         button.classList.remove('active');
       } else {
+        // Add tag if not yet selected
         selectedTags.push(tag);
         button.classList.add('active');
       }
 
-      posts.forEach((post: PostElement) => {
-        const postTags = (post.dataset.tags || '').split(',');
-        const shouldShow = selectedTags.length === 0 || 
-          selectedTags.every((tag: string) => postTags.includes(tag));
-        
-        post.classList.toggle('hidden', !shouldShow);
-      });
+      // Update card visibility
+      updateVisibility();
+      
+      // Update URL query parameters (optional)
+      const url = new URL(window.location.href);
+      if (selectedTags.length > 0) {
+        url.searchParams.set('tags', selectedTags.join(','));
+      } else {
+        url.searchParams.delete('tags');
+      }
+      history.replaceState({}, '', url);
     });
+  });
+
+  // Initialize based on URL params when page loads
+  document.addEventListener('DOMContentLoaded', () => {
+    const url = new URL(window.location.href);
+    const tagsParam = url.searchParams.get('tags');
+    if (tagsParam) {
+      const urlTags = tagsParam.split(',').filter(Boolean);
+      selectedTags = urlTags;
+      
+      // Update button states
+      buttons.forEach((button) => {
+        const tag = button.dataset.tag;
+        if (tag && urlTags.includes(tag)) {
+          button.classList.add('active');
+        }
+      });
+      
+      // Update visibility
+      updateVisibility();
+    }
   });
 </script>

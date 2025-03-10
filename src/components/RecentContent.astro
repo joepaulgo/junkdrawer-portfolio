@@ -1,0 +1,57 @@
+---
+import { getCollection } from "astro:content";
+import Card from "./Card.astro";
+
+interface Props {
+  collection: 'posts' | 'projects';
+  title: string;
+  count?: number;
+  viewAllLink?: string;
+}
+
+const { collection, title, count = 3, viewAllLink } = Astro.props;
+
+// Fetch collection items
+const items = await getCollection(collection);
+
+// Sort by date (newest first) and take requested count
+const recentItems = items
+  .filter(item => item.data.date)
+  .sort((a, b) => {
+    const dateA = a.data.date instanceof Date ? a.data.date : new Date(a.data.date);
+    const dateB = b.data.date instanceof Date ? b.data.date : new Date(b.data.date);
+    return dateB.getTime() - dateA.getTime();
+  })
+  .slice(0, count);
+
+// Determine link text based on collection type
+const linkText = collection === 'posts' ? 'Read more' : 'View project';
+---
+
+<div class="recent-content-section">
+  <div class="section-header">
+    <h2>{title}</h2>
+    {viewAllLink && <a href={viewAllLink} class="nav-link">View all</a>}
+  </div>
+
+  {recentItems.length > 0 ? (
+    <div class="card-grid">
+      {recentItems.map((item) => (
+        <Card
+          title={item.data.title}
+          image={item.data.image}
+          excerpt={item.data.excerpt}
+          tags={item.data.tags}
+          link={`/${collection}/${item.slug}`}
+          linkText={linkText}
+        />
+      ))}
+    </div>
+  ) : (
+    <p>No {collection} available yet!</p>
+  )}
+</div>
+
+<style lang="scss">
+  @use '../styles/components.scss';
+</style>

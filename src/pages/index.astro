@@ -1,25 +1,6 @@
 ---
-import { getCollection } from "astro:content";
 import Layout from "../layouts/Layout.astro";
-
-// const featuredEntries = await getCollection("featured");
-// const featuredPost = featuredEntries[0];
-
-const projects = await getCollection("projects");
-const recentProjects = projects
-    .sort(
-        (a, b) =>
-            new Date(b.data.date).getTime() - new Date(a.data.date).getTime(),
-    )
-    .slice(0, 3);
-
-const posts = await getCollection("posts");
-const recentPosts = posts
-    .sort(
-        (a, b) =>
-            new Date(b.data.date).getTime() - new Date(a.data.date).getTime(),
-    )
-    .slice(0, 3);
+import RecentContent from "../components/RecentContent.astro";
 ---
 
 <Layout>
@@ -32,82 +13,25 @@ const recentPosts = posts
             />
         </div>
 
-        <div class="section projects-section">
-            <div class="section-header">
-                <h2>Recent Projects</h2>
-                <a href="/projects" class="nav-link">View All Projects</a>
-            </div>
-            <div class="grid">
-                {
-                    recentProjects.map((project) => (
-                        <article class="card">
-                            {project.data.image && (
-                                <div class="image-container">
-                                    <img
-                                        src={project.data.image}
-                                        alt={project.data.title}
-                                        class="card-image"
-                                    />
-                                </div>
-                            )}
-                            <div class="card-content">
-                                <h3>{project.data.title}</h3>
-                                {project.data.excerpt && (
-                                    <p>{project.data.excerpt}</p>
-                                )}
-                                <a
-                                    href={`/projects/${project.slug}`}
-                                    class="nav-link"
-                                >
-                                    View Project
-                                </a>
-                            </div>
-                        </article>
-                    ))
-                }
-            </div>
-        </div>
+        <RecentContent 
+            collection="projects" 
+            title="Recent Projects" 
+            count={3}
+            viewAllLink="/projects" 
+        />
 
-        <div class="section posts-section">
-            <div class="section-header">
-                <h2>Recent Posts</h2>
-                <a href="/posts" class="nav-link">View All Posts</a>
-            </div>
-            <div class="grid">
-                {
-                    recentPosts.map((post) => (
-                        <article class="card">
-                            {post.data.image && (
-                                <div class="image-container">
-                                    <img
-                                        src={post.data.image}
-                                        alt={post.data.title}
-                                        class="card-image"
-                                    />
-                                </div>
-                            )}
-                            <div class="card-content">
-                                <h3>{post.data.title}</h3>
-                                {post.data.excerpt && (
-                                    <p>{post.data.excerpt}</p>
-                                )}
-                                <a
-                                    href={`/posts/${post.slug}`}
-                                    class="nav-link"
-                                >
-                                    Read Post
-                                </a>
-                            </div>
-                        </article>
-                    ))
-                }
-            </div>
-        </div>
+        <RecentContent 
+            collection="posts" 
+            title="Recent Posts" 
+            count={3}
+            viewAllLink="/posts" 
+        />
     </div>
 </Layout>
 
 <style lang="scss">
     @use "../styles/variables" as *;
+    @use "../styles/components.scss";
 
     .content {
         margin-top: 5em;
@@ -119,87 +43,8 @@ const recentPosts = posts
         margin-bottom: 3em;
     }
 
-    .featured-post {
-        margin: 4em 0;
-        display: grid;
-        grid-template-columns: 1fr;
-        gap: 2em;
-    }
-
-    .featured-image {
-        width: 100%;
-        height: auto;
-        object-fit: cover;
-    }
-
-    .featured-content {
-        h2 {
-            margin-top: 0;
-        }
-
-        p {
-            color: $l-grey;
-        }
-    }
-
-    .section {
-        margin: 4em 0;
-    }
-
-    .section-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
+    // Additional custom styles for the homepage if needed
+    .intro {
         margin-bottom: 2em;
-
-        h2 {
-            margin: 0;
-        }
-    }
-
-    .grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-        gap: 2em;
-    }
-
-    .card {
-        background: rgba($light-background, 0.05);
-        border-radius: 4px;
-        overflow: hidden;
-        transition: transform 0.2s ease;
-
-        &:hover {
-            transform: translateY(-4px);
-        }
-    }
-
-    .image-container {
-        aspect-ratio: 16 / 9;
-        overflow: hidden;
-    }
-
-    .card-image {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-    }
-
-    .card-content {
-        padding: 1.5em;
-
-        h3 {
-            margin-top: 0;
-            margin-bottom: 0.5em;
-
-            &::before {
-                content: none;
-            }
-        }
-
-        p {
-            color: $l-grey;
-            margin: 0.5em 0 1em;
-        }
     }
 </style>

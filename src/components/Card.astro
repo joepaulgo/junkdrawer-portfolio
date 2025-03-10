@@ -1,0 +1,36 @@
+---
+interface Props {
+  title: string;
+  image?: string;
+  excerpt?: string;
+  tags?: string[];
+  link: string;
+  linkText: string;
+}
+
+const { title, image, excerpt, tags = [], link, linkText } = Astro.props;
+---
+
+<div class="card" data-card data-tags={tags.join(',')}>
+  {image && (
+    <div class="card-image-container">
+      <img src={image} alt={title} class="card-image" />
+    </div>
+  )}
+  <div class="card-content">
+    <h3>{title}</h3>
+    {excerpt && <p>{excerpt}</p>}
+    {tags.length > 0 && (
+      <div class="tags-container">
+        {tags.map((tag) => (
+          <span class="tag">{tag}</span>
+        ))}
+      </div>
+    )}
+    <a href={link} class="nav-link">{linkText}</a>
+  </div>
+</div>
+
+<style lang="scss">
+  @use '../styles/components.scss';
+</style>
