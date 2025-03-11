@@ -3,9 +3,11 @@
 @mixin dark-background {
   background: $dark-background;
   color: $white;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 @mixin light-background {
   background: $light-background;
   color: $grey;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }

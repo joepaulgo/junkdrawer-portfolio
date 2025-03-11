@@ -1,0 +1,128 @@
+---
+// Theme Switcher component with iOS-style toggle
+---
+
+<div class="theme-switcher">
+  <label for="theme-toggle" class="switch">
+    <input type="checkbox" id="theme-toggle" aria-label="Toggle dark mode" title="Toggle light/dark theme">
+    <span class="slider">
+      <span class="icon dark-icon">🌙</span>
+      <span class="icon light-icon">☀️</span>
+    </span>
+  </label>
+</div>
+
+<style lang="scss">
+  @use "../styles/variables" as *;
+
+  .theme-switcher {
+    display: flex;
+    align-items: center;
+  }
+
+  .switch {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 30px;
+    cursor: pointer;
+  }
+
+  /* Hide default HTML checkbox */
+  .switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+
+  /* The slider */
+  .slider {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba($purple, 0.3);
+    transition: 0.4s;
+    border-radius: 34px;
+    display: flex;
+    align-items: center;
+    padding: 0 4px;
+    justify-content: space-between;
+  }
+
+  /* The moving circle */
+  .slider:before {
+    content: "";
+    position: absolute;
+    height: 26px;
+    width: 26px;
+    left: 3px;
+    bottom: 2px;
+    background-color: white;
+    transition: 0.4s;
+    border-radius: 50%;
+    z-index: 2;
+  }
+
+  /* Positioning for the icons */
+  .icon {
+    z-index: 1;
+    font-size: 14px;
+    transition: opacity 0.4s ease;
+  }
+
+  .dark-icon {
+    margin-left: 7px;
+  }
+
+  .light-icon {
+    margin-right: 7px;
+  }
+
+  /* Special styles for when in light mode */
+  :global(html.light-mode) {
+    .slider {
+      background-color: rgba($blue, 0.7);
+    }
+    
+    .slider:before {
+      transform: translateX(29px);
+    }
+  }
+</style>
+
+<script>
+  // Function to toggle between light and dark mode
+  function setupThemeToggle() {
+    const toggleCheckbox = document.getElementById('theme-toggle') as HTMLInputElement;
+    
+    // Set initial state based on current theme
+    if (localStorage.getItem('theme') === 'light') {
+      toggleCheckbox.checked = true;
+    }
+    
+    // Add change event listener
+    toggleCheckbox.addEventListener('change', function() {
+      const newTheme = this.checked ? 'light' : 'dark';
+      
+      // Update localStorage
+      localStorage.setItem('theme', newTheme);
+      
+      // Update document class
+      if (newTheme === 'light') {
+        document.documentElement.classList.add('light-mode');
+      } else {
+        document.documentElement.classList.remove('light-mode');
+      }
+    });
+  }
+
+  // Initialize on DOM load
+  document.addEventListener('DOMContentLoaded', setupThemeToggle);
+  
+  // Also handle the case when script runs after DOM is already loaded
+  if (document.readyState === 'interactive' || document.readyState === 'complete') {
+    setupThemeToggle();
+  }
+</script>

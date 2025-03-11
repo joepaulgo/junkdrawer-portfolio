@@ -14,6 +14,17 @@ import "../styles/main.scss";
             rel="stylesheet"
         />
         <title>Junkdrawer</title>
+        <!-- Theme initialization script - runs immediately -->
+        <script is:inline>
+            (function() {
+                const savedTheme = localStorage.getItem('theme') || 'dark';
+                if (savedTheme === 'light') {
+                    document.documentElement.classList.add('light-mode');
+                } else {
+                    document.documentElement.classList.remove('light-mode');
+                }
+            })();
+        </script>
     </head>
     <body>
         <TopNav />

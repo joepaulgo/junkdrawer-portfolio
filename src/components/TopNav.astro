@@ -1,11 +1,15 @@
 ---
+import ThemeSwitcher from "./ThemeSwitcher.astro";
 const { title = "Junkdrawer", description = "" } = Astro.props;
 ---
 
 <div class="top-nav">
     <div class="container nav">
         <a href="/">{title}</a>
-        <p>{description}</p>
+        <div class="nav-right">
+            <p>{description}</p>
+            <ThemeSwitcher />
+        </div>
     </div>
 </div>
 
@@ -18,11 +22,25 @@ const { title = "Junkdrawer", description = "" } = Astro.props;
         display: flex;
         align-items: center;
         @include light-background;
+        transition: background-color 0.3s ease, color 0.3s ease;
+        padding: 0 10vw;
 
         a {
             text-decoration: none;
             color: $grey;
             font-size: 1em;
+            font-weight: 600; // Make text bolder for better readability
+            transition: color 0.3s ease;
+        }
+        
+        // Light mode styles
+        :global(html.light-mode) & {
+            background-color: $dark-background;
+            color: $white;
+            
+            a {
+                color: $white;
+            }
         }
     }
 
@@ -30,9 +48,25 @@ const { title = "Junkdrawer", description = "" } = Astro.props;
         display: flex;
         justify-content: space-between;
         align-items: inherit;
+        width: 100%;
+        max-width: 80em; /* Match the main container max-width */
+        margin: 0 auto; /* Center the content */
+        padding: 0; /* Remove padding as it's handled by the parent */
 
         p {
             font-size: 1em;
+            margin-right: 1em;
+            transition: color 0.3s ease;
         }
+        
+        // Ensure description text is also white in light mode
+        :global(html.light-mode) & p {
+            color: $white;
+        }
+    }
+
+    .nav-right {
+        display: flex;
+        align-items: center;
     }
 </style>

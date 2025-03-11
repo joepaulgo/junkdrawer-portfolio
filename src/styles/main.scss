@@ -4,14 +4,60 @@
 html {
     padding: env(safe-area-inset);
     -webkit-text-size-adjust: 100%;
+    
+    // Define theme color variables
+    --background-color: #{$dark-background};
+    --text-color: #{$white};
+    --heading1-color: #{$h1-color};
+    --heading2-color: #{$h2-color};
+    --heading3-color: #{$h3-color};
+    --link-color: #{$a-color};
+    --link-hover-color: #d8c5fb;
+    --list-color: #{$pink};
+    --card-background: rgba(0, 0, 0, 0.05);
+    --card-border: rgba(174, 129, 255, 0.2);
+    --card-border-hover: #{$purple};
+    --tag-text-color: #{$l-grey};
+    --tag-border-color: #{$l-grey};
+    --paragraph-color: #{$l-grey};
+    
+    &.light-mode {
+        --background-color: #{$light-background};
+        --text-color: #{$grey};
+        --heading1-color: #7d991f; // More accessible orange
+        --heading2-color: #0089a9; // Darker blue
+        --heading3-color: #7d991f; // Matching h1
+        --link-color: #6b43d1; // Darker purple
+        --link-hover-color: #502fa5; // Even darker on hover
+        --list-color: #c90062; // More accessible pink
+        --card-background: rgba(0, 48, 62, 0.05);
+        --card-border: rgba(0, 48, 62, 0.2);
+        --card-border-hover: #{$grey};
+        --tag-text-color: #444444;
+        --tag-border-color: #444444;
+        --paragraph-color: #444444;
+    }
 }
 
 body {
     font-family: "Inconsolata", monospace;
-    // font-size: 62.5%;
     margin: 0;
     padding: 0;
-    @include dark-background;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+// Light mode specific overrides (beyond CSS custom properties)
+html.light-mode {
+    .top-nav {
+        background-color: $dark-background;
+        color: $white;
+
+        a {
+            color: $white !important; /* Using !important to ensure this rule takes precedence */
+        }
+    }
 }
 
 h1,
@@ -25,15 +71,18 @@ ul {
 }
 
 h1 {
-    color: $h1-color;
+    color: var(--heading1-color);
+    transition: color 0.3s ease;
 }
 
 h2 {
-    color: $h2-color;
+    color: var(--heading2-color);
+    transition: color 0.3s ease;
 }
 
 h3 {
-    color: $h3-color;
+    color: var(--heading3-color);
+    transition: color 0.3s ease;
     &::before {
         content: "> ";
     }
@@ -42,7 +91,8 @@ h3 {
 ul {
     padding-left: 0;
     list-style: none;
-    color: $pink;
+    color: var(--list-color);
+    transition: color 0.3s ease;
 }
 
 ol {
@@ -57,10 +107,34 @@ ol {
 
 a {
     text-decoration: none;
-    color: $a-color;
+    color: var(--link-color);
+    transition: color 0.3s ease;
     &:hover {
-        color: #d8c5fb;
+        color: var(--link-hover-color);
     }
+}
+
+p {
+    color: var(--text-color);
+}
+
+.card, .post-card, .project-card {
+    background-color: var(--card-background);
+    border: 1px solid var(--card-border);
+    transition: border-color 0.3s ease;
+    
+    &:hover {
+        border-color: var(--card-border-hover);
+    }
+    
+    p {
+        color: var(--paragraph-color);
+    }
+}
+
+.tag, .tech-tag {
+    color: var(--tag-text-color);
+    border-color: var(--tag-border-color);
 }
 
 a.nav-link {
