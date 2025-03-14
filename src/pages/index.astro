@@ -20,6 +20,8 @@ import RecentContent from "../components/RecentContent.astro";
             viewAllLink="/projects" 
         />
 
+        <div class="section-spacer"></div>
+
         <RecentContent 
             collection="posts" 
             title="Recent Posts" 
@@ -46,5 +48,11 @@ import RecentContent from "../components/RecentContent.astro";
     // Additional custom styles for the homepage if needed
     .intro {
         margin-bottom: 2em;
+    }
+
+    .section-spacer {
+      margin: 4em 0;
+      height: 1px;
+      background: rgba($white, 0.05);
     }
 </style>
