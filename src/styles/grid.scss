@@ -3,7 +3,7 @@
 // Reusable grid layout with responsive adjustments
 @mixin content-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: 2em;
   row-gap: 4em;
   margin-top: 2em;
