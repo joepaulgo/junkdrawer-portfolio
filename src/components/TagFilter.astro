@@ -11,7 +11,7 @@ const { tags, selectedTags } = Astro.props;
   {tags.map((tag: string) => (
     <button
       class:list={[
-        'tag',
+        'tag-button',
         { active: selectedTags.includes(tag) }
       ]}
       data-tag={tag}
@@ -31,7 +31,7 @@ const { tags, selectedTags } = Astro.props;
     margin: 2em 0;
   }
 
-  .tag {
+  .tag-button {
     padding: 0.3em 0.8em;
     border: 1px solid $purple;
     background: transparent;
@@ -49,14 +49,29 @@ const { tags, selectedTags } = Astro.props;
       background: $purple;
       color: $white;
     }
+    
+    // Light mode adjustments
+    :global(html.light-mode) & {
+      border-color: var(--link-color);
+      color: var(--link-color);
+      
+      &:hover {
+        background: rgba(var(--link-color), 0.1);
+      }
+      
+      &.active {
+        background: var(--link-color);
+        color: $white;
+      }
+    }
   }
 </style>
 
 <script>
   // Get all tag buttons and card elements
-  const buttons = document.querySelectorAll<HTMLButtonElement>('.tag-filter .tag');
-  const cards = document.querySelectorAll<HTMLElement>('[data-card], [data-post]');
-  let selectedTags: string[] = [];
+  const buttons = document.querySelectorAll('.tag-button');
+  const cards = document.querySelectorAll('[data-card], [data-post]');
+  let selectedTags = [];
 
   // Function to update card visibility based on selected tags
   const updateVisibility = () => {

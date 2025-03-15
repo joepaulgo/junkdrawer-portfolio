@@ -2,6 +2,7 @@
 import { getCollection } from 'astro:content';
 import Layout from '../../layouts/Layout.astro';
 import TagFilter from '../../components/TagFilter.astro';
+import Card from '../../components/Card.astro';
 
 const posts = await getCollection('posts');
 
@@ -20,39 +21,21 @@ const selectedTags = Astro.url.searchParams.get('tags')?.split(',').filter(Boole
 
     <div class="posts-grid">
       {posts.map((post) => (
-        <div 
-          class="post-card" 
-          data-post 
-          data-tags={post.data.tags?.join(',') || ''}
-        >
-          {post.data.image && (
-            <img 
-              src={post.data.image} 
-              alt={post.data.title}
-              class="post-image"
-            />
-          )}
-          <div class="post-content">
-            <h2>{post.data.title}</h2>
-            {post.data.excerpt && (
-              <p>{post.data.excerpt}</p>
-            )}
-            <div class="post-tags">
-              {post.data.tags?.map((tag) => (
-                <span class="tag">{tag}</span>
-              ))}
-            </div>
-            <a href={`/posts/${post.slug}`} class="nav-link">Read more</a>
-          </div>
-        </div>
+        <Card
+          title={post.data.title}
+          image={post.data.image}
+          excerpt={post.data.excerpt}
+          tags={post.data.tags}
+          link={`/posts/${post.slug}`}
+          linkText="Read more"
+          type="post"
+        />
       ))}
     </div>
   </div>
 </Layout>
 
 <style lang="scss">
-  @use '../../styles/variables' as *;
-
   .posts-container {
     margin: 0 auto;
     padding: 2em 0;
@@ -63,50 +46,5 @@ const selectedTags = Astro.url.searchParams.get('tags')?.split(',').filter(Boole
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
     gap: 2em;
     margin-top: 2em;
-  }
-
-  .post-card {
-    border: 1px solid rgba($purple, 0.2);
-    padding: 1em;
-    transition: all 0.2s ease;
-
-    &:hover {
-      border-color: $purple;
-    }
-
-    &.hidden {
-      display: none;
-    }
-  }
-
-  .post-image {
-    width: 100%;
-    height: 200px;
-    object-fit: cover;
-    margin-bottom: 1em;
-  }
-
-  .post-content {
-    h2 {
-      margin-top: 0;
-    }
-
-    p {
-      color: $l-grey;
-    }
-  }
-
-  .post-tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5em;
-    margin: 1em 0;
-
-    .tag {
-      font-size: 0.8em;
-      color: $l-grey;
-      padding: 0.2em 0.5em;
-      border: 1px solid $l-grey;
-    }
   }
 </style>

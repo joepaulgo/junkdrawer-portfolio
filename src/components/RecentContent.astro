@@ -44,6 +44,7 @@ const linkText = collection === 'posts' ? 'Read more' : 'View project';
           tags={item.data.tags}
           link={`/${collection}/${item.slug}`}
           linkText={linkText}
+          type={collection === 'posts' ? 'post' : 'project'}
         />
       ))}
     </div>
@@ -53,5 +54,24 @@ const linkText = collection === 'posts' ? 'Read more' : 'View project';
 </div>
 
 <style lang="scss">
-  @use '../styles/components.scss';
+  .recent-content-section {
+    margin: 3em 0;
+  }
+  
+  .section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2em;
+
+    h2 {
+      margin: 0;
+    }
+  }
+  
+  .card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 2em;
+  }
 </style>

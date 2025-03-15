@@ -1,6 +1,7 @@
 @use "variables" as *;
 @use "mixins" as *;
 
+// Base HTML element styles
 html {
     padding: env(safe-area-inset);
     -webkit-text-size-adjust: 100%;
@@ -48,24 +49,8 @@ body {
     transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-// Light mode specific overrides (beyond CSS custom properties)
-html.light-mode {
-    .top-nav {
-        background-color: $dark-background;
-        color: $white;
-
-        a {
-            color: $white !important; /* Using !important to ensure this rule takes precedence */
-        }
-    }
-}
-
-h1,
-h2,
-h3,
-h4,
-p,
-ul {
+// Typography
+h1, h2, h3, h4, p, ul {
     font-size: 1em;
     line-height: 1.8em;
 }
@@ -88,6 +73,7 @@ h3 {
     }
 }
 
+// Lists
 ul {
     padding-left: 0;
     list-style: none;
@@ -99,12 +85,14 @@ ol {
     padding-left: 1.5em;
 }
 
+// Container
 .container {
     max-width: 80em;
     width: 80vw;
     margin: 3em auto;
 }
 
+// Links
 a {
     text-decoration: none;
     color: var(--link-color);
@@ -118,25 +106,7 @@ p {
     color: var(--text-color);
 }
 
-.card, .post-card, .project-card {
-    background-color: var(--card-background);
-    border: 1px solid var(--card-border);
-    transition: border-color 0.3s ease;
-    
-    &:hover {
-        border-color: var(--card-border-hover);
-    }
-    
-    p {
-        color: var(--paragraph-color);
-    }
-}
-
-.tag, .tech-tag {
-    color: var(--tag-text-color);
-    border-color: var(--tag-border-color);
-}
-
+// Nav link style that appears in multiple components
 a.nav-link {
     &::before {
         content: "[";
@@ -146,6 +116,7 @@ a.nav-link {
     }
 }
 
+// Basic image handling
 img {
     max-width: 100%;
     height: auto;

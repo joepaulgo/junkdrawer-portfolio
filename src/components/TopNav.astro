@@ -5,7 +5,7 @@ const { title = "Junkdrawer", description = "" } = Astro.props;
 
 <div class="top-nav">
     <div class="container nav">
-        <a href="/">{title}</a>
+        <a href="/" class="site-title">{title}</a>
         <div class="nav-right">
             <p>{description}</p>
             <ThemeSwitcher />
@@ -25,20 +25,23 @@ const { title = "Junkdrawer", description = "" } = Astro.props;
         transition: background-color 0.3s ease, color 0.3s ease;
         padding: 0 10vw;
 
-        a {
+        .site-title {
             text-decoration: none;
             color: $grey;
             font-size: 1em;
-            font-weight: 600; // Make text bolder for better readability
+            font-weight: 600;
             transition: color 0.3s ease;
         }
         
-        // Light mode styles
+        // Light mode styles (using global selector for theme support)
         :global(html.light-mode) & {
-            background-color: $dark-background;
-            color: $white;
+            @include dark-background;
             
-            a {
+            .site-title {
+                color: $white;
+            }
+            
+            p {
                 color: $white;
             }
         }
@@ -47,21 +50,16 @@ const { title = "Junkdrawer", description = "" } = Astro.props;
     .container.nav {
         display: flex;
         justify-content: space-between;
-        align-items: inherit;
+        align-items: center;
         width: 100%;
-        max-width: 80em; /* Match the main container max-width */
-        margin: 0 auto; /* Center the content */
-        padding: 0; /* Remove padding as it's handled by the parent */
+        max-width: 80em;
+        margin: 0 auto;
+        padding: 0;
 
         p {
             font-size: 1em;
             margin-right: 1em;
             transition: color 0.3s ease;
-        }
-        
-        // Ensure description text is also white in light mode
-        :global(html.light-mode) & p {
-            color: $white;
         }
     }
 

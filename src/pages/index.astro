@@ -20,7 +20,7 @@ import RecentContent from "../components/RecentContent.astro";
             viewAllLink="/projects" 
         />
 
-        <div class="section-spacer"></div>
+        <div class="divider"></div>
 
         <RecentContent 
             collection="posts" 
@@ -33,7 +33,6 @@ import RecentContent from "../components/RecentContent.astro";
 
 <style lang="scss">
     @use "../styles/variables" as *;
-    @use "../styles/components.scss";
 
     .content {
         margin-top: 5em;
@@ -45,14 +44,13 @@ import RecentContent from "../components/RecentContent.astro";
         margin-bottom: 3em;
     }
 
-    // Additional custom styles for the homepage if needed
-    .intro {
-        margin-bottom: 2em;
-    }
-
-    .section-spacer {
+    .divider {
       margin: 4em 0;
       height: 1px;
       background: rgba($white, 0.05);
+      
+      :global(html.light-mode) & {
+        background: rgba($grey, 0.1);
+      }
     }
 </style>
