@@ -54,6 +54,8 @@ const linkText = collection === 'posts' ? 'Read more' : 'View project';
 </div>
 
 <style lang="scss">
+  @use "../styles/variables" as *;
+  
   .recent-content-section {
     margin: 3em 0;
   }
@@ -69,9 +71,5 @@ const linkText = collection === 'posts' ? 'Read more' : 'View project';
     }
   }
   
-  .card-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 2em;
-  }
+  // Grid styles are now imported from grid.scss
 </style>

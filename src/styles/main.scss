@@ -1,5 +1,6 @@
 @use "variables" as *;
 @use "mixins" as *;
+@use "grid" as *;
 
 // Base HTML element styles
 html {
@@ -89,7 +90,7 @@ ol {
 .container {
     max-width: 80em;
     width: 80vw;
-    margin: 3em auto;
+    margin: auto;
 }
 
 // Links

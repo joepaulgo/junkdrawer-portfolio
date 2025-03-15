@@ -1,18 +1,13 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import RecentContent from "../components/RecentContent.astro";
+import HeroSection from "../components/HeroSection.astro";
 ---
 
 <Layout>
+    <HeroSection />
+    
     <div class="content">
-        <div class="intro">
-            <img
-                class="hero-image"
-                src="https://s3.amazonaws.com/the-junk-drawer/recipes/junkdrawer-hero.png"
-                alt="Junkdrawer Hero"
-            />
-        </div>
-
         <RecentContent 
             collection="projects" 
             title="Recent Projects" 
@@ -35,13 +30,7 @@ import RecentContent from "../components/RecentContent.astro";
     @use "../styles/variables" as *;
 
     .content {
-        margin-top: 5em;
-    }
-
-    .hero-image {
-        max-width: 100%;
-        height: auto;
-        margin-bottom: 3em;
+        margin-top: 2em;
     }
 
     .divider {
