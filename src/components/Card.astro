@@ -51,6 +51,8 @@ const {
     height: 100%;
     display: flex;
     flex-direction: column;
+    height: auto;
+    min-height: 0;
 
     &:hover {
       border-color: var(--card-border-hover);
@@ -92,7 +94,7 @@ const {
   .card-excerpt {
     color: var(--paragraph-color);
     margin: 0.5em 0 1em;
-    flex-grow: 1;
+    flex-grow: 0;
   }
 
   .card-tags {

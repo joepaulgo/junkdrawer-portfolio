@@ -55,17 +55,7 @@ const isPost = (entry: Props["entry"]): entry is CollectionEntry<"posts"> =>
             <h1>{entry.data.title}</h1>
 
             {
-                isProject(entry) && entry.data.technologies && (
-                    <div class="tech-stack">
-                        {entry.data.technologies.map((tech: string) => (
-                            <span class="tech-tag">{tech}</span>
-                        ))}
-                    </div>
-                )
-            }
-
-            {
-                isPost(entry) && entry.data.tags && (
+                entry.data.tags && entry.data.tags.length > 0 && (
                     <div class="tags">
                         {entry.data.tags.map((tag: string) => (
                             <span class="tag">{tag}</span>
@@ -118,7 +108,6 @@ const isPost = (entry: Props["entry"]): entry is CollectionEntry<"posts"> =>
         margin-bottom: 2em;
     }
 
-    .tech-stack,
     .tags {
         display: flex;
         flex-wrap: wrap;
@@ -126,7 +115,6 @@ const isPost = (entry: Props["entry"]): entry is CollectionEntry<"posts"> =>
         margin: 1em 0;
     }
 
-    .tech-tag,
     .tag {
         background: rgba($purple, 0.1);
         color: $purple;
