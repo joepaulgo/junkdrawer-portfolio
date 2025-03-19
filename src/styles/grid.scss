@@ -1,3 +1,6 @@
+// Update the grid.scss file to ensure proper padding on smaller screens
+// src/styles/grid.scss
+
 @use 'variables' as *;
 
 // Reusable grid layout with responsive adjustments
@@ -8,6 +11,8 @@
   row-gap: 4em;
   margin-top: 2em;
   margin-bottom: 0;
+  // Added padding for smaller screens
+  padding: 0;
 }
 
 // Apply this mixin to any grid element
@@ -16,4 +21,20 @@
 .projects-grid {
   @include content-grid;
   min-height: 0;
+}
+
+// Media query for smaller screens
+@media (max-width: 768px) {
+  .card-grid,
+  .posts-grid,
+  .projects-grid {
+    padding: 0;
+    gap: 2em;
+  }
+  
+  // Ensure the container maintains padding
+  .container {
+    width: 90vw !important;
+    padding: 0 1rem !important;
+  }
 }

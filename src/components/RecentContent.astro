@@ -75,36 +75,19 @@ const linkText = collection === 'posts' ? 'Read more' : 'View project';
 </style>
 
 <script>
-  // This script ensures we only show complete rows
+  // This script has been modified to allow partial rows
   function adjustGridItems() {
     const grids = document.querySelectorAll('.card-grid, .posts-grid, .projects-grid');
     
     grids.forEach(grid => {
-      const containerWidth = grid.clientWidth;
-      const cardWidth = 300; // match the minmax value in CSS
-      const gap = 32; // 2em converted to pixels (adjust if your base font size differs)
-      
-      // Calculate how many cards fit in a row
-      const cardsPerRow = Math.floor((containerWidth + gap) / (cardWidth + gap));
-      
-      // Limit visible cards to a multiple of cardsPerRow
+      // Get all cards and make them visible
       const cards = Array.from(grid.children);
+      cards.forEach(card => {
+        card.style.display = '';
+      });
       
-      // Only apply this if it would leave a partial row
-      if (cards.length % cardsPerRow !== 0) {
-        // Calculate how many complete rows we want
-        const completeRows = Math.floor(cards.length / cardsPerRow);
-        const visibleCards = completeRows * cardsPerRow;
-        
-        // Hide cards that would create incomplete rows
-        cards.forEach((card, index) => {
-          if (index >= visibleCards) {
-            card.style.display = 'none';
-          } else {
-            card.style.display = '';
-          }
-        });
-      }
+      // No longer hiding cards that would create incomplete rows
+      // This allows displaying any number of items, even if they don't fill a complete row
     });
   }
 
