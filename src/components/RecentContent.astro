@@ -3,7 +3,7 @@ import { getCollection } from "astro:content";
 import Card from "./Card.astro";
 
 interface Props {
-  collection: 'posts' | 'projects';
+  collection: 'projects';  // Changed from 'posts' | 'projects'
   title: string;
   count?: number;
   viewAllLink?: string;
@@ -24,8 +24,8 @@ const recentItems = items
   })
   .slice(0, count);
 
-// Determine link text based on collection type
-const linkText = collection === 'posts' ? 'Read more' : 'View project';
+// Always use 'View project' as link text
+const linkText = 'View project';
 ---
 
 <div class="recent-content-section">
@@ -44,54 +44,11 @@ const linkText = collection === 'posts' ? 'Read more' : 'View project';
           tags={item.data.tags}
           link={`/${collection}/${item.slug}`}
           linkText={linkText}
-          type={collection === 'posts' ? 'post' : 'project'}
+          type="project"
         />
       ))}
     </div>
   ) : (
-    <p>No {collection} available yet!</p>
+    <p>No projects available yet!</p>
   )}
 </div>
-
-<style lang="scss">
-  @use "../styles/variables" as *;
-  
-  .recent-content-section {
-    margin: 3em 0;
-  }
-  
-  .section-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 2em;
-
-    h2 {
-      margin: 0;
-    }
-  }
-  
-  // Grid styles are now imported from grid.scss
-</style>
-
-<script>
-  // This script has been modified to allow partial rows
-  function adjustGridItems() {
-    const grids = document.querySelectorAll('.card-grid, .posts-grid, .projects-grid');
-    
-    grids.forEach(grid => {
-      // Get all cards and make them visible
-      const cards = Array.from(grid.children);
-      cards.forEach(card => {
-        card.style.display = '';
-      });
-      
-      // No longer hiding cards that would create incomplete rows
-      // This allows displaying any number of items, even if they don't fill a complete row
-    });
-  }
-
-  // Run on load and resize
-  window.addEventListener('load', adjustGridItems);
-  window.addEventListener('resize', adjustGridItems);
-</script>

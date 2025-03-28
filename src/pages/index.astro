@@ -1,28 +1,43 @@
 ---
 import Layout from "../layouts/Layout.astro";
-import RecentContent from "../components/RecentContent.astro";
+import Card from "../components/Card.astro";
 import HeroSection from "../components/HeroSection.astro";
+import { getCollection } from "astro:content";
+
+// Fetch projects and sort by date (newest first)
+const allProjects = await getCollection("projects");
+const recentProjects = allProjects
+  .filter(project => project.data.date)
+  .sort((a, b) => {
+    const dateA = a.data.date instanceof Date ? a.data.date : new Date(a.data.date);
+    const dateB = b.data.date instanceof Date ? b.data.date : new Date(b.data.date);
+    return dateB.getTime() - dateA.getTime();
+  })
+  .slice(0, 3); // Get only the 3 most recent projects
 ---
 
 <Layout>
     <HeroSection />
     
     <div class="content">
-        <RecentContent 
-            collection="projects" 
-            title="Recent Projects" 
-            count={2}
-            viewAllLink="/projects" 
-        />
+        <div class="section-header">
+            <h2>Recent Projects</h2>
+            <a href="/projects" class="nav-link">View all projects</a>
+        </div>
 
-        <div class="divider"></div>
-
-        <RecentContent 
-            collection="posts" 
-            title="Recent Posts" 
-            count={2}
-            viewAllLink="/posts" 
-        />
+        <div class="featured-projects">
+            {recentProjects.map((project) => (
+                <Card
+                    title={project.data.title}
+                    image={project.data.image}
+                    excerpt={project.data.excerpt}
+                    tags={project.data.tags}
+                    link={`/projects/${project.slug}`}
+                    linkText="View project"
+                    type="project"
+                />
+            ))}
+        </div>
     </div>
 </Layout>
 
@@ -32,14 +47,30 @@ import HeroSection from "../components/HeroSection.astro";
     .content {
         margin-top: 2em;
     }
+    
+    .section-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 2em;
 
-    .divider {
-      margin: 4em 0;
-      height: 1px;
-      background: rgba($white, 0.05);
-      
-      :global(html.light-mode) & {
-        background: rgba($grey, 0.1);
-      }
+        h2 {
+            margin: 0;
+        }
+    }
+    
+    .featured-projects {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 2em;
+        
+        @media (max-width: 1024px) {
+            grid-template-columns: repeat(2, 1fr);
+        }
+        
+        @media (max-width: 768px) {
+            grid-template-columns: 1fr;
+            gap: 3em;
+        }
     }
 </style>

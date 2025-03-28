@@ -4,40 +4,21 @@ import { getCollection } from "astro:content";
 import type { CollectionEntry } from "astro:content";
 import Layout from "../layouts/Layout.astro";
 
-type EntryType = "project" | "post"; 
 type Props = {
-    entry:
-        | CollectionEntry<"projects">
-        | CollectionEntry<"posts">
-    type: EntryType;
+    entry: CollectionEntry<"projects">;
 };
 
 export async function getStaticPaths() {
     const projects = await getCollection("projects");
-    const posts = await getCollection("posts");
 
-    const projectPaths = projects.map((entry) => ({
+    return projects.map((entry) => ({
         params: { slug: `projects/${entry.slug}` },
-        props: { entry, type: "project" as const },
+        props: { entry },
     }));
-
-    const postPaths = posts.map((entry) => ({
-        params: { slug: `posts/${entry.slug}` },
-        props: { entry, type: "post" as const },
-    }));
-
-    return [...projectPaths, ...postPaths ];
 }
 
-const { entry, type } = Astro.props;
+const { entry } = Astro.props;
 const { Content } = await entry.render();
-
-// Type guards
-const isProject = (
-    entry: Props["entry"],
-): entry is CollectionEntry<"projects"> => type === "project";
-const isPost = (entry: Props["entry"]): entry is CollectionEntry<"posts"> =>
-    type === "post";
 ---
 
 <Layout>
@@ -67,7 +48,7 @@ const isPost = (entry: Props["entry"]): entry is CollectionEntry<"posts"> =>
             <Content />
 
             {
-                isProject(entry) && entry.data.link && (
+                entry.data.link && (
                     <div class="project-link">
                         <a
                             href={entry.data.link}
@@ -83,54 +64,8 @@ const isPost = (entry: Props["entry"]): entry is CollectionEntry<"posts"> =>
         </article>
 
         <div class="navigation">
-            <a href="javascript:history.back()" class="nav-link back-link"
-                >← back</a
-            >
+            <a href="javascript:history.back()" class="nav-link back-link">← back</a>
             <a href="/" class="nav-link home-link">home</a>
         </div>
     </div>
 </Layout>
-
-<style lang="scss">
-    @use "../styles/variables" as *;
-
-    .content-wrapper {
-        margin: 2em 0 4em;
-    }
-
-    article {
-        margin: 2em 0;
-    }
-
-    .lead-img {
-        width: 100%;
-        height: auto;
-        margin-bottom: 2em;
-    }
-
-    .tags {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 0.5em;
-        margin: 1em 0;
-    }
-
-    .tag {
-        background: rgba($purple, 0.1);
-        color: $purple;
-        padding: 0.2em 0.6em;
-        border-radius: 4px;
-        font-size: 0.9em;
-    }
-
-    .project-link {
-        margin-top: 2em;
-    }
-
-    .navigation {
-        margin: 2em 0;
-        display: flex;
-        gap: 1.5em;
-        align-items: center;
-    }
-</style>

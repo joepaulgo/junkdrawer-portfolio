@@ -12,14 +12,9 @@ const baseSchema = z.object({
 // Export the schema type
 export type BaseSchema = z.infer<typeof baseSchema>;
 
-const posts = defineCollection({
-  type: 'content',
-  schema: baseSchema
-});
-
 const projects = defineCollection({
   type: 'content',
   schema: baseSchema
 });
 
-export const collections = { posts, projects };
+export const collections = { projects };

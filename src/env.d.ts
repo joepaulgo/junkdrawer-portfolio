@@ -12,16 +12,6 @@ declare module 'astro:content' {
 // Tell TypeScript about your content collections
 declare module 'astro:content' {
   type DataEntryMap = {
-    'posts': {
-      type: 'content';
-      data: {
-        title: string;
-        date?: Date;
-        image?: string;
-        excerpt?: string;
-        tags?: string[];
-      };
-    };
     'projects': {
       type: 'content';
       data: {

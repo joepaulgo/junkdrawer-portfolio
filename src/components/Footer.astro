@@ -1,0 +1,73 @@
+---
+// Footer component with basic information and links
+---
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-content">
+      <div class="copyright">Joe Paul 2025</div>
+      <div class="footer-links">
+        <a href="mailto:hello@joepaul.com" class="footer-link">contact</a>
+        <a href="https://google.com" class="footer-link">blog</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<style lang="scss">
+  @use '../styles/variables' as *;
+
+  .site-footer {
+    margin-top: 4em;
+    padding: 2em 0;
+    border-top: 1px solid rgba($white, 0.05);
+    
+    // Light mode support
+    :global(html.light-mode) & {
+      border-top: 1px solid rgba($grey, 0.1);
+    }
+    
+    .container {
+      max-width: 80em;
+      width: 80vw;
+      margin: 0 auto;
+      
+      @media (max-width: 768px) {
+        width: 90vw;
+        padding: 0 1rem;
+      }
+    }
+  }
+  
+  .footer-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    
+    @media (max-width: 768px) {
+      flex-direction: column;
+      gap: 1em;
+      text-align: center;
+    }
+  }
+  
+  .copyright {
+    color: var(--paragraph-color);
+    font-size: 0.9em;
+  }
+  
+  .footer-links {
+    display: flex;
+    gap: 1.5em;
+  }
+  
+  .footer-link {
+    color: var(--link-color);
+    text-decoration: none;
+    transition: color 0.2s ease;
+    
+    &:hover {
+      color: var(--link-hover-color);
+    }
+  }
+</style>
